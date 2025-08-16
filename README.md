@@ -21,6 +21,8 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 |--------|----------|-------------|
 | `GET` | `/games` | Get all games |
 | `POST` | `/games` | Create a game |
+| `PUT` | `/games{id}` | Update a game |
+| `DELETE` | `/games{id}` | Delete a game |
 
 ## TODO
 - User API
