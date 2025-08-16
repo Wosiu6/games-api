@@ -5,7 +5,7 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 ## Tech Stack
 
 - **.NET 9** - Framework
-- **Entity Framework Core** - ORM with PostgreSQL
+- **Entity Framework Core** - RDBMS with PostgreSQL
 - **MediatR** - CQRS implementation
 - **AutoMapper** - Object mapping
 - **Minimal APIs** - Endpoints
