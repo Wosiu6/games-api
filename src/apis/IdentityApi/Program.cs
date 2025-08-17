@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using UsersApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("Identity Api")
+            .WithTheme(ScalarTheme.Purple)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    });
+    
     app.UseOpenApi();
     app.UseSwaggerUi();
     await app.InitialiseDatabaseAsync<IdentityDbContextInitialiser>();
