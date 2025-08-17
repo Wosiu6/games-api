@@ -50,7 +50,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseOpenApi();
-    app.UseSwaggerUi();
     await app.InitialiseDatabaseAsync<ApplicationDbContextInitialiser>();
 }
 
