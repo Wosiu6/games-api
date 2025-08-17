@@ -27,14 +27,14 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 ## Running Migrations
 
 ### Games Api
-- Initial creation: dotnet ef migrations add InitialGamesCreate --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/GamesApi/GamesApi.csproj --context ApplicationDbContext
-- Adding new migrations: dotnet ef migrations add YourName --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/GamesApi/GamesApi.csproj --context ApplicationDbContext
-- Updating db: dotnet ef database update --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/GamesApi/GamesApi.csproj --context ApplicationDbContext
+- Initial creation: `dotnet ef migrations add InitialGamesCreate --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/GamesApi/GamesApi.csproj --context ApplicationDbContext`
+- Adding new migrations: `dotnet ef migrations add YourName --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/GamesApi/GamesApi.csproj --context ApplicationDbContext`
+- Updating db: `dotnet ef database update --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/GamesApi/GamesApi.csproj --context ApplicationDbContext`
   
 ### Identity Api
-- Initial creation: dotnet ef migrations add InitialIdentityCreate --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext
-- Adding new migrations: dotnet ef migrations add YourName --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext
-- Updating db: dotnet ef database update --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext
+- Initial creation: `dotnet ef migrations add InitialIdentityCreate --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext`
+- Adding new migrations: `dotnet ef migrations add YourName --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext`
+- Updating db: `dotnet ef database update --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext`
 
 ## TODO
 - User API
