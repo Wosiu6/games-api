@@ -1,23 +1,48 @@
-using GamesApi.Application;
-using GamesApi.Application.Games.Commands.CreateGame;
-using GamesApi.Infrastructure;
-using GamesApi.Infrastructure.Data;
-using MediatR;
+using System.Text;
+using Application;
+using Infrastructure;
+using Infrastructure.Data;
+using Infrastructure.Data.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-IConfiguration configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", true,true)
-    .Build();
-
 builder.Services.AddOpenApi();
 
-builder.Services.ConfigureDatabaseContext(configuration);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey
+            (Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]!)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddApplicationServices();
+
+builder.Services.ConfigureGamesDatabaseContext(builder.Configuration);
+
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
-builder.Services.ConfigureMediatR();
+builder.Services.ConfigureGamesMediatR();
+
 builder.Services.AddOpenApiDocument();
-builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
@@ -26,10 +51,14 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseOpenApi();
     app.UseSwaggerUi();
-    await app.InitialiseDatabaseAsync();
+    await app.InitialiseDatabaseAsync<ApplicationDbContextInitialiser>();
 }
 
-app.MapEndpoints();
+app.MapGamesEndpoints();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.Run();
