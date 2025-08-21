@@ -34,14 +34,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\Games\Games.csproj" />
-      <ProjectReference Include="..\Users\Users.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Application">
-        <HintPath>..\IdentityApi\bin\Debug\net9.0\Application.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>

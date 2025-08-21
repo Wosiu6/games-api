@@ -2,7 +2,7 @@
 using Domain.Common.Interfaces;
 using MediatR;
 
-namespace Games.Games.Commands.DeleteGame;
+namespace Application.Games.Commands.DeleteGame;
 
 public record DeleteGameCommand(int Id) : IRequest;
 

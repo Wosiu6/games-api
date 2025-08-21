@@ -1,49 +1,20 @@
-using System.Text;
 using Application;
 using Infrastructure;
 using Infrastructure.Data;
 using Infrastructure.Data.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-        ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]!)),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
-    };
-});
+builder.Services.AddOpenApiDocument(configuration, "Identity");
 
 builder.Services.AddAuthorization();
-
-builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(configuration);
 
 builder.Services.AddApplicationServices();
-
-builder.Services.ConfigureGamesDatabaseContext(builder.Configuration);
-
-builder.Services.AddScoped<ApplicationDbContextInitialiser>();
-
-builder.Services.ConfigureGamesMediatR();
-
-builder.Services.AddOpenApiDocument();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -61,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
     app.UseSwaggerUi();
     app.UseOpenApi();
+
     await app.InitialiseDatabaseAsync<ApplicationDbContextInitialiser>();
 }
 

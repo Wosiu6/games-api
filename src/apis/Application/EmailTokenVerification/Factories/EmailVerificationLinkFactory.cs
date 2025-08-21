@@ -3,7 +3,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Application.EmailVerificationTokens.Factory;
+namespace Application.EmailTokenVerification.Factories;
 
 public sealed class EmailVerificationLinkFactory(
     IHttpContextAccessor httpContextAccessor,

@@ -1,47 +1,118 @@
-﻿using Domain.Common.Interfaces;
-using Games.Games.Commands.CreateGame;
+﻿using Application.Games.Commands.CreateGame;
+using Application.Users.Commands.CreateUser;
+using Domain.Common.Interfaces;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Users.Users.Commands.CreateUser;
+using Microsoft.IdentityModel.Tokens;
+using NSwag;
+using NSwag.Generation.Processors.Security;
+using System.Text;
 
 namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void ConfigureGamesDatabaseContext(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.ConfigureGamesDatabaseContext(configuration);
+        services.ConfigureIdentityDatabaseContext(configuration);
+        services.ConfigureGamesMediatR();
+        services.ConfigureIdentityMediatR();
+
+        services.AddEmailServices(configuration);
+    }
+
+    public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(x =>
+        {
+            x.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidIssuer = configuration["JwtSettings:Issuer"],
+                ValidAudience = configuration["JwtSettings:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true
+            };
+        });
+    }
+
+    public static void AddOpenApiDocument(this IServiceCollection services, IConfiguration configuration, string apiName)
+{
+    services.AddOpenApiDocument(doc =>
+    {
+        doc.DocumentName = "v1";
+        doc.PostProcess = d =>
+        {
+            d.Info.Version = "v1";
+            d.Info.Title = $"{apiName} API v1.0";
+        };
+        
+        doc.AddSecurity("bearer", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+        {
+            Type = OpenApiSecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+        });
+        
+        doc.OperationProcessors.Add(
+            new OperationSecurityScopeProcessor("bearer"));
+    });
+}
+
+    private static void AddEmailServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services
+        .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
+        .AddSmtpSender(configuration["Email:Host"], configuration.GetValue<int>("Email:Port"));
+    }
+
+    private static void ConfigureGamesDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("GamesDb")));
-        
-        services.AddScoped<IApplicationDbContext>(provider => 
+
+        services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<ApplicationDbContextInitialiser>();
     }
-    
-    public static void ConfigureIdentityDatabaseContext(this IServiceCollection services, IConfiguration configuration)
+
+    private static void ConfigureIdentityDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<IdentityDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Identity")));
-        
-        services.AddScoped<IIdentityDbContext>(provider => 
+
+        services.AddScoped<IIdentityDbContext>(provider =>
             provider.GetRequiredService<IdentityDbContext>());
-        
+
         services.AddScoped<IdentityDbContextInitialiser>();
     }
-    
-    public static void ConfigureGamesMediatR(this IServiceCollection services)
+
+    private static void ConfigureGamesMediatR(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => {
+        services.AddMediatR(cfg =>
+        {
             cfg.RegisterServicesFromAssembly(typeof(CreateGameCommand).Assembly);
         });
     }
-    
-    public static void ConfigureIdentityMediatR(this IServiceCollection services)
+
+    private static void ConfigureIdentityMediatR(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => {
+        services.AddMediatR(cfg =>
+        {
             cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly);
         });
     }
