@@ -13,10 +13,11 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 ## Prerequisites
 
 - .NET 9 SDK
-- PostgreSQL
+- PostgreSQL (if not using In-Memory DB)
 
 ## Setup
 To run the application, you will need to either edit the Database setup to use an in-memory database or install the PostgreSQL server and create 2 databases, then replace the connection strings in applicationSettings.json
+Data is pre-seeded in debug mode, so I'd recommend running in debug mode and grabbing a JWT token from the login endpoint, then adding the bearer token to your requests. You can do it in Swagger via the 'Authorize' button.
 
 ## Games API Endpoints
 
