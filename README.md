@@ -15,7 +15,10 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 - .NET 9 SDK
 - PostgreSQL
 
-## API Endpoints
+## Setup
+To run the application, you will need to either edit the Database setup to use an in-memory database or install the PostgreSQL server and create 2 databases, then replace the connection strings in applicationSettings.json
+
+## Games API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -23,6 +26,13 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 | `POST` | `/games` | Create a game |
 | `PUT` | `/games/{id}` | Update a game |
 | `DELETE` | `/games/{id}` | Delete a game |
+
+## Identity API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/users` | Registers a user |
+| `POST` | `/users/login` | Returns a JWT token for authorization with the Games API |
 
 ## Running Migrations
 
