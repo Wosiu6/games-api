@@ -2,7 +2,7 @@
 using Domain.Common.Interfaces;
 using MediatR;
 
-namespace Games.Games.Commands.UpdateGame;
+namespace Application.Games.Commands.UpdateGame;
 
 public record UpdateGameCommand(int Id) : IRequest
 {

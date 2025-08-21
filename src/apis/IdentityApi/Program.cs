@@ -1,53 +1,29 @@
-using System.Text;
 using Application;
-using Application.DIExtensions;
 using Infrastructure;
 using Infrastructure.Data;
 using Infrastructure.Data.Extensions;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using UsersApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<IdentityDbContextInitialiser>();
-builder.Services.AddOpenApiDocumentWithAuth();
-builder.Services.AddIdentityServices();
+builder.Services.AddOpenApiDocument(configuration, "Identity");
 
-builder.Services
-    .AddFluentEmail(builder.Configuration["Email:SenderEmail"], builder.Configuration["Email:Sender"])
-    .AddSmtpSender(builder.Configuration["Email:Host"], builder.Configuration.GetValue<int>("Email:Port"));
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(o =>
-    {
-        o.RequireHttpsMetadata = false;
-        o.TokenValidationParameters = new TokenValidationParameters
-        {
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]!)),
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            ClockSkew = TimeSpan.Zero
-        };
-    });
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(configuration);
 
-builder.Services.ConfigureIdentityDatabaseContext(builder.Configuration);
-
-builder.Services.ConfigureIdentityMediatR();
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    
+
     app.MapScalarApiReference(options =>
     {
         options
@@ -55,12 +31,11 @@ if (app.Environment.IsDevelopment())
             .WithTheme(ScalarTheme.Purple)
             .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
-    
-    app.UseOpenApi();
-    app.UseSwaggerUi();
-    await app.InitialiseDatabaseAsync<IdentityDbContextInitialiser>();
 
-    app.ApplyMigrations();
+    app.UseSwaggerUi();
+    app.UseOpenApi();
+
+    await app.InitialiseDatabaseAsync<IdentityDbContextInitialiser>();
 }
 
 app.UseHttpsRedirection();

@@ -1,15 +1,14 @@
-﻿using Application.EmailVerificationTokens.Factory;
+﻿using Application.EmailTokenVerification.Factories;
 using AutoMapper;
 using Domain.Common.Interfaces;
 using Domain.Entities;
 using Domain.Identity.PasswordHashers;
 using FluentEmail.Core;
-using Games.Games.Commands.UpdateGame;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace Users.Users.Commands.CreateUser;
+namespace Application.Users.Commands.CreateUser;
 
 public record CreateUserCommand : IRequest<UserVm>
 {
@@ -42,7 +41,8 @@ public class CreateUserCommandHandler(
             LastName = request.LastName,
             PasswordHash = passwordHasher.HashPassword(request.Password),
             CreatedOn = utcNow,
-            UpdatedOn = utcNow
+            UpdatedOn = utcNow,
+            EmailVerified = true // until email verification implemented
         };
 
         context.Users.Add(user);

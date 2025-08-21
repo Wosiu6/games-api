@@ -1,4 +1,4 @@
-﻿namespace Games.Games.Queries.GetGames;
+﻿namespace Application.Games.Queries.GetGames;
 
 public class GamesVm
 {
