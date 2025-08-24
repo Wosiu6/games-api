@@ -1,6 +1,6 @@
 # Games API
 
-A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreSQL.
+A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreSQL. It utilises JWT-based authentication with endpoint authorisation.
 
 ## Tech Stack
 
@@ -9,6 +9,7 @@ A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreS
 - **MediatR** - CQRS implementation
 - **AutoMapper** - Object mapping
 - **Minimal APIs** - Endpoints
+- Azure Identity package for JWT Authentication
 
 ## Prerequisites
 
@@ -48,9 +49,6 @@ Data is pre-seeded in debug mode, so I'd recommend running in debug mode and gra
 - Updating db: `dotnet ef database update --verbose --project apis/Infrastructure/Infrastructure.csproj --startup-project apis/IdentityApi/IdentityApi.csproj --context IdentityDbContext`
 
 ## TODO
-- User API
-- Authentication
-- Authorization
 - API Gateway
 - Balance Loader
 - Host on Azure
