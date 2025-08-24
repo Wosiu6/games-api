@@ -14,7 +14,6 @@ public static class ServiceCollectionExtensions
             config.Title = "Your API";
             config.Version = "v1";
             
-            // Add JWT Bearer authentication
             config.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.ApiKey,
@@ -25,7 +24,6 @@ public static class ServiceCollectionExtensions
                 BearerFormat = "JWT"
             });
 
-            // Apply security requirement to all operations
             config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
 
