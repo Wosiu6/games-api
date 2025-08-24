@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Application.Extensions;
+﻿using Application.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,9 +6,13 @@ namespace Application;
 
 public static class DependencyInjection
 {
-    public static void AddApplicationServices(this IServiceCollection services)
+    public static void AddGamesApplicationServices(this IServiceCollection services)
     {
         services.AddGamesServices();
+    }
+
+    public static void AddIdentityApplicationServices(this IServiceCollection services)
+    {
         services.AddIdentityServices();
     }
 

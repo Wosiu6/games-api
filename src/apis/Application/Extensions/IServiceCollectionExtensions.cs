@@ -1,12 +1,13 @@
 ﻿using Application.EmailTokenVerification.Factories;
-using Application.Games.Commands.CreateGame;
-using Application.Games.Commands.DeleteGame;
-using Application.Games.Commands.UpdateGame;
-using Application.Games.Queries.GetGames;
-using Application.Users.Commands.CreateUser;
 using AutoMapper;
 using Domain.Identity.IdentityProviders;
 using Domain.Identity.PasswordHashers;
+using Games.CQRS.Commands.CreateGame;
+using Games.CQRS.Commands.DeleteGame;
+using Games.CQRS.Commands.UpdateGame;
+using Games.CQRS.Queries.GetGames;
+using Identity.CQRS.Commands.CreateUser;
+using Identity.CQRS.Commands.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -73,7 +74,7 @@ namespace Application.Extensions
             app.MapPost("/users/login", async (IMediator mediator, LoginUserCommand request) =>
             {
                 var token = await mediator.Send(request);
-                return TypedResults.Created($"users/login/", new { access_token = token });
+                return TypedResults.Created($"users/login/", new { jwt_token = token });
             });
         }
     }
