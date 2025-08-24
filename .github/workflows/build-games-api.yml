@@ -1,16 +1,20 @@
-name: Build Application
+name: Build Games API
 
 on:
   push:
     branches: [ main, develop ]
     paths:
+      - 'src/Games-Api/**'
       - 'src/Application/**'
       - 'src/Domain/**'
+      - 'src/Infrastructure/**'
   pull_request:
     branches: [ main, develop ]
     paths:
+      - 'src/Games-Api/**'
       - 'src/Application/**'
       - 'src/Domain/**'
+      - 'src/Infrastructure/**'
   workflow_dispatch:
 
 jobs:
@@ -26,11 +30,10 @@ jobs:
         dotnet-version: 9.0.x
     
     - name: Restore dependencies
-      run: dotnet restore src/Application/Application.csproj
+      run: dotnet restore src/Games-Api/Games-Api.csproj
     
-    - name: Build Application
-      run: dotnet build src/Application/Application.csproj --no-restore --configuration Release
+    - name: Build Games API
+      run: dotnet build src/Games-Api/Games-Api.csproj --no-restore --configuration Release
     
-    #   Until tests written
-    # - name: Run Application Tests
-    #   run: dotnet test tests/ --filter "Category=Application" --configuration Release --verbosity normal
+    # - name: Run Games API Tests
+    #   run: dotnet test tests/ --filter "Category=GamesAPI" --configuration Release --verbosity normal
