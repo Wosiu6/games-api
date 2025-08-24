@@ -9,8 +9,6 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddOpenApiDocumentWithAuth(this IServiceCollection services)
     {
-        Console.WriteLine();
-
         services.AddOpenApiDocument(config =>
         {
             config.Title = "Your API";
