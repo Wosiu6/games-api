@@ -4,12 +4,12 @@ on:
   push:
     branches: [ main, develop ]
     paths:
-      - 'src/Application/Identity.CQRS/**'
+      - 'src/Identity.CQRS/**'
       - 'src/Domain/**'
   pull_request:
     branches: [ main, develop ]
     paths:
-      - 'src/Application/Identity.CQRS/**'
+      - 'src/Identity.CQRS/**'
       - 'src/Domain/**'
   workflow_dispatch:
 
@@ -26,10 +26,10 @@ jobs:
         dotnet-version: 9.0.x
     
     - name: Restore dependencies
-      run: dotnet restore src/Application/Identity.CQRS/Identity.CQRS.csproj
+      run: dotnet restore src/Identity.CQRS/Identity.CQRS.csproj
     
     - name: Build Identity.CQRS
-      run: dotnet build src/Application/Identity.CQRS/Identity.CQRS.csproj --no-restore --configuration Release
+      run: dotnet build src/Identity.CQRS/Identity.CQRS.csproj --no-restore --configuration Release
     
     # - name: Run Identity CQRS Tests
     #   run: dotnet test tests/ --filter "Category=IdentityCQRS" --configuration Release --verbosity normal
