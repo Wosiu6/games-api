@@ -1,0 +1,34 @@
+name: Build Domain
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Domain/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Domain/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore src/Domain/Domain.csproj
+    
+    - name: Build Domain
+      run: dotnet build src/Domain/Domain.csproj --no-restore --configuration Release
+    
+    #   Until tests are added
+    # - name: Run Domain Tests
+    #   run: dotnet test tests/ --filter "Category=Domain" --configuration Release --verbosity normal
