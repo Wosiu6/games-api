@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
                 BearerFormat = "JWT"
             });
 
-            config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            config.OperationProceffffssors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
         });
 
         return services;
