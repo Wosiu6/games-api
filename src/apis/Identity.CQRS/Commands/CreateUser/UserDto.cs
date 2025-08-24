@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 
-namespace Application.Users.Commands.CreateUser;
+namespace Identity.CQRS.Commands.CreateUser;
 
-public class UserVm
+public class UserDto
 {
     public int Id { get; init; }
     public string Email { get; set; }
@@ -12,13 +13,12 @@ public class UserVm
     public bool EmailVerified { get; set; }
     public DateTime CreatedOn { get; init; }
     public DateTime UpdatedOn { get; init; }
-    
+
     public class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<UserDto, UserVm>();
+            CreateMap<User, UserDto>();
         }
     }
 }
-

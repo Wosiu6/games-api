@@ -1,6 +1,6 @@
-﻿using Application.Games.Commands.CreateGame;
-using Application.Users.Commands.CreateUser;
-using Domain.Common.Interfaces;
+﻿using Domain.Common.Interfaces;
+using Games.CQRS.Commands.CreateGame;
+using Identity.CQRS.Commands.CreateUser;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +15,15 @@ namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddGameInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureGamesDatabaseContext(configuration);
-        services.ConfigureIdentityDatabaseContext(configuration);
         services.ConfigureGamesMediatR();
+    }
+
+    public static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.ConfigureIdentityDatabaseContext(configuration);
         services.ConfigureIdentityMediatR();
 
         services.AddEmailServices(configuration);

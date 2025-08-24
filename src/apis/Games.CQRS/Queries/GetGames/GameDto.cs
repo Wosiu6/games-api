@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 
-namespace Application.Games.Queries.GetGames;
+namespace Games.CQRS.Queries.GetGames;
 
 public class GameDto
 {

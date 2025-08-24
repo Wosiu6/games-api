@@ -8,7 +8,7 @@ using MediatR;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Users.Commands.CreateUser;
+namespace Identity.CQRS.Commands.LoginUser;
 
 public record LoginUserCommand : IRequest<string>
 {

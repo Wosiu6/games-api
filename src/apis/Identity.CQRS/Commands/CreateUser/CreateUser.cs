@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace Application.Users.Commands.CreateUser;
+namespace Identity.CQRS.Commands.CreateUser;
 
 public record CreateUserCommand : IRequest<UserVm>
 {

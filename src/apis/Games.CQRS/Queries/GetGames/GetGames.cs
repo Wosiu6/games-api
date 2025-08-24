@@ -4,7 +4,7 @@ using Domain.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Games.Queries.GetGames;
+namespace Games.CQRS.Queries.GetGames;
 
 public record GetGamesQuery : IRequest<GamesVm>;
 

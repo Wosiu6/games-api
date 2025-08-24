@@ -15,8 +15,8 @@ builder.Services.AddOpenApiDocument(configuration, "Identity");
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(configuration);
 
-builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddIdentityApplicationServices();
+builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

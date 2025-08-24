@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamesApi", "apis\GamesApi\GamesApi.csproj", "{A09CA89F-5F48-4865-9A76-E76850885883}"
 EndProject
@@ -36,6 +36,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{5DCB00
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "apis\Domain\Domain.csproj", "{447D4661-3A33-442A-870F-6AB9BA6EFAE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games.CQRS", "apis\Games.CQRS\Games.CQRS.csproj", "{ACB0B9C0-79D5-91F8-AAEF-370D608800F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.CQRS", "apis\Identity.CQRS\Identity.CQRS.csproj", "{9AFAAB6C-52A1-D17D-90CE-19C2D18AFFCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{447D4661-3A33-442A-870F-6AB9BA6EFAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{447D4661-3A33-442A-870F-6AB9BA6EFAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{447D4661-3A33-442A-870F-6AB9BA6EFAE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB0B9C0-79D5-91F8-AAEF-370D608800F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB0B9C0-79D5-91F8-AAEF-370D608800F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB0B9C0-79D5-91F8-AAEF-370D608800F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB0B9C0-79D5-91F8-AAEF-370D608800F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AFAAB6C-52A1-D17D-90CE-19C2D18AFFCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AFAAB6C-52A1-D17D-90CE-19C2D18AFFCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AFAAB6C-52A1-D17D-90CE-19C2D18AFFCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AFAAB6C-52A1-D17D-90CE-19C2D18AFFCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +92,8 @@ Global
 		{DD11E6E7-E6B9-4C9A-8ED4-C116DFC92D9D} = {CBBF4D08-9C3F-4ED8-B228-549DF70DA8C8}
 		{5DCB00EA-268F-4C93-8C77-7177DD3B64DE} = {9B72A263-DCE5-4DAF-A331-27DB7DDE6E21}
 		{447D4661-3A33-442A-870F-6AB9BA6EFAE2} = {5DCB00EA-268F-4C93-8C77-7177DD3B64DE}
+		{ACB0B9C0-79D5-91F8-AAEF-370D608800F0} = {CBBF4D08-9C3F-4ED8-B228-549DF70DA8C8}
+		{9AFAAB6C-52A1-D17D-90CE-19C2D18AFFCF} = {CBBF4D08-9C3F-4ED8-B228-549DF70DA8C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98394EF5-BDBD-4F73-8B40-6F1B9EA9F24F}
