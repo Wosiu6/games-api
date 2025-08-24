@@ -9,6 +9,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddOpenApiDocumentWithAuth(this IServiceCollection services)
     {
+        Console.WriteLine("Configuring OpenAPI document with JWT authentication...");
+
         services.AddOpenApiDocument(config =>
         {
             config.Title = "Your API";
