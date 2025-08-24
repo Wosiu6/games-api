@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 builder.Services.AddOpenApi();
-builder.Services.AddOpenApiDocument(configuration, "Identity");
+builder.Services.AddOpenApiDocument(configuration, "Games");
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(configuration);
