@@ -3,15 +3,14 @@ name: CodeQL
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - .gitignore
-      - README.md
-
+    paths:
+      - 'tests/**'
+      - 'src/**'
   pull_request:
     branches: [ main ]
-    paths-ignore:
-      - .gitignore
-      - README.md
+    paths:
+      - 'tests/**'
+      - 'src/**'
 
   schedule:
     - cron: '00 0 * * 2'
