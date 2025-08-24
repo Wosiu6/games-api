@@ -1,0 +1,34 @@
+name: Build Application
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Application/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Application/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore src/Application/Application.csproj
+    
+    - name: Build Application
+      run: dotnet build src/Application/Application.csproj --no-restore --configuration Release
+    
+    #   Until tests written
+    # - name: Run Application Tests
+    #   run: dotnet test tests/ --filter "Category=Application" --configuration Release --verbosity normal
