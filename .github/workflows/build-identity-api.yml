@@ -4,14 +4,14 @@ on:
   push:
     branches: [ main, develop ]
     paths:
-      - 'src/Games-Api/Identity-Api/**'
+      - 'src/Games.Api/Identity.Api/**'
       - 'src/Application/Identity.CQRS/**'
       - 'src/Domain/**'
       - 'src/Infrastructure/**'
   pull_request:
     branches: [ main, develop ]
     paths:
-      - 'src/Games-Api/Identity-Api/**'
+      - 'src/Games.Api/Identity.Api/**'
       - 'src/Application/Identity.CQRS/**'
       - 'src/Domain/**'
       - 'src/Infrastructure/**'
@@ -30,10 +30,10 @@ jobs:
         dotnet-version: 9.0.x
     
     - name: Restore dependencies
-      run: dotnet restore src/Games-Api/Identity-Api/Identity-Api.csproj
+      run: dotnet restore src/Games.Api/Identity.Api/Identity.Api.csproj
     
     - name: Build Identity API
-      run: dotnet build src/Games-Api/Identity-Api/Identity-Api.csproj --no-restore --configuration Release
+      run: dotnet build src/Games.Api/Identity.Api/Identity.Api.csproj --no-restore --configuration Release
     
     # - name: Run Identity API Tests
     #   run: dotnet test tests/ --filter "Category=IdentityAPI" --configuration Release --verbosity normal

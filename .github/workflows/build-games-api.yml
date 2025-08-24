@@ -4,14 +4,14 @@ on:
   push:
     branches: [ main, develop ]
     paths:
-      - 'src/Games-Api/**'
+      - 'src/Games.Api/**'
       - 'src/Application/**'
       - 'src/Domain/**'
       - 'src/Infrastructure/**'
   pull_request:
     branches: [ main, develop ]
     paths:
-      - 'src/Games-Api/**'
+      - 'src/Games.Api/**'
       - 'src/Application/**'
       - 'src/Domain/**'
       - 'src/Infrastructure/**'
@@ -30,10 +30,10 @@ jobs:
         dotnet-version: 9.0.x
     
     - name: Restore dependencies
-      run: dotnet restore src/Games-Api/Games-Api.csproj
+      run: dotnet restore src/Games.Api/Games.Api.csproj
     
     - name: Build Games API
-      run: dotnet build src/Games-Api/Games-Api.csproj --no-restore --configuration Release
+      run: dotnet build src/Games.Api/Games.Api.csproj --no-restore --configuration Release
     
     # - name: Run Games API Tests
     #   run: dotnet test tests/ --filter "Category=GamesAPI" --configuration Release --verbosity normal
