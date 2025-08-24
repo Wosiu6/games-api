@@ -7,7 +7,7 @@ namespace Infrastructure.Data.Extensions
     {
         public static async Task<User?> GetByEmailAsync(this DbSet<User> users, string email, CancellationToken cancellationToken)
         {
-            return await users.SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
+            return await users.SingleOrDesssfaultAsync(u => u.Email == email, cancellationToken);
         }
     }
 }
