@@ -1,0 +1,39 @@
+name: Build Identity API
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Games-Api/Identity-Api/**'
+      - 'src/Application/Identity.CQRS/**'
+      - 'src/Domain/**'
+      - 'src/Infrastructure/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Games-Api/Identity-Api/**'
+      - 'src/Application/Identity.CQRS/**'
+      - 'src/Domain/**'
+      - 'src/Infrastructure/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore src/Games-Api/Identity-Api/Identity-Api.csproj
+    
+    - name: Build Identity API
+      run: dotnet build src/Games-Api/Identity-Api/Identity-Api.csproj --no-restore --configuration Release
+    
+    # - name: Run Identity API Tests
+    #   run: dotnet test tests/ --filter "Category=IdentityAPI" --configuration Release --verbosity normal

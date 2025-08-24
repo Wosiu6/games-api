@@ -1,0 +1,44 @@
+name: Run All Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'tests/**'
+      - 'src/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'tests/**'
+      - 'src/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # Run daily at 2 AM, yes, I whoever needs to wake up at 2AM to fix this will likely ensure this does not happen again :)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build Solution
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Run All Tests
+      run: dotnet test tests/ --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+    
+    - name: Upload Coverage Reports
+      uses: codecov/codecov-action@v4
+      if: success()
+      with:
+        directory: ./coverage
+        fail_ci_if_error: false

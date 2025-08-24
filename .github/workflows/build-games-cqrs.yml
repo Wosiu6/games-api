@@ -1,0 +1,35 @@
+name: Build Games CQRS
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Application/Games.CQRS/**'
+      - 'src/Domain/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'src/Application/Games.CQRS/**'
+      - 'src/Domain/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore src/Application/Games.CQRS/Games.CQRS.csproj
+    
+    - name: Build Games.CQRS
+      run: dotnet build src/Application/Games.CQRS/Games.CQRS.csproj --no-restore --configuration Release
+    
+    # - name: Run Games CQRS Tests
+    #   run: dotnet test tests/ --filter "Category=GamesCQRS" --configuration Release --verbosity normal
