@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Application.Identity.Commands.LoginUser;
 using Domain.Identity.IdentityProviders;
 using Domain.Identity.PasswordHashers;
@@ -9,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace Scriptorium.Tests;
+namespace Application.Tests;
 
 public class LoginUserHandlerTests
 {
@@ -30,8 +27,8 @@ public class LoginUserHandlerTests
             FirstName = "Login",
             LastName = "User",
             PasswordHash = passwordHasher.HashPassword(pwd),
-            CreatedOn = System.DateTime.UtcNow,
-            UpdatedOn = System.DateTime.UtcNow,
+            CreatedOn = DateTime.UtcNow,
+            UpdatedOn = DateTime.UtcNow,
             EmailVerified = true
         };
 

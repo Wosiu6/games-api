@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Application.Games.Queries.GetGames;
 
 public class GamesVm

@@ -1,11 +1,9 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Application.Games.Commands.CreateGame;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Scriptorium.Tests;
+namespace Application.Tests;
 
 public class CreateGameHandlerTests
 {
@@ -23,7 +21,7 @@ public class CreateGameHandlerTests
         var cmd = new CreateGameCommand
         {
             Title = "Unit Test Game",
-            ReleaseDate = System.DateTime.UtcNow
+            ReleaseDate = DateTime.UtcNow
         };
 
         int id = await handler.Handle(cmd, CancellationToken.None);

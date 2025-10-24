@@ -1,11 +1,9 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Application.Games.Commands.UpdateGame;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Scriptorium.Tests;
+namespace Application.Tests;
 
 public class UpdateGameHandlerTests
 {
@@ -21,9 +19,9 @@ public class UpdateGameHandlerTests
         var game = new Domain.Entities.Game
         {
             Title = "Old Title",
-            ReleaseDate = System.DateTime.UtcNow,
-            CreatedOn = System.DateTime.UtcNow,
-            UpdatedOn = System.DateTime.UtcNow
+            ReleaseDate = DateTime.UtcNow,
+            CreatedOn = DateTime.UtcNow,
+            UpdatedOn = DateTime.UtcNow
         };
 
         context.Games.Add(game);

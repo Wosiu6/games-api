@@ -10,12 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using NSubstitute;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace Scriptorium.Tests;
+namespace Application.Tests;
 
 public class CreateUserCommandHandlerTests
 {

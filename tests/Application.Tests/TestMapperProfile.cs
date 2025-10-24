@@ -2,7 +2,7 @@ using Application.Identity.Commands.CreateUser;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Scriptorium.Tests;
+namespace Application.Tests;
 
 public class TestMapperProfile : Profile
 {
