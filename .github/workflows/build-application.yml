@@ -31,6 +31,5 @@ jobs:
     - name: Build Application
       run: dotnet build src/Application/Application.csproj --no-restore --configuration Release
     
-    #   Until tests written
-    # - name: Run Application Tests
-    #   run: dotnet test tests/ --filter "Category=Application" --configuration Release --verbosity normal
+    - name: Run Application Tests
+      run: dotnet test tests/Application.Tests --filter "Category=Application" --configuration Release --verbosity normal

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Data.Extensions;
+namespace Domain.Common.Data.Extensions;
 
 public static class InitialiserExtensions
 {

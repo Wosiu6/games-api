@@ -6,7 +6,13 @@ namespace Application;
 
 public static class DependencyInjection
 {
-    public static void AddGamesApplicationServices(this IServiceCollection services)
+    public static void AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddGamesServices();
+        services.AddIdentityServices();
+    }
+
+    private static void AddGamesApplicationServices(this IServiceCollection services)
     {
         services.AddGamesServices();
     }
@@ -14,6 +20,12 @@ public static class DependencyInjection
     public static void AddIdentityApplicationServices(this IServiceCollection services)
     {
         services.AddIdentityServices();
+    }
+
+    public static void MapApplicationEndpoints(this WebApplication builder)
+    {
+        builder.MapGamesEndpoints();
+        builder.MapIdentityEndpoints();
     }
 
     public static void MapGamesEndpoints(this WebApplication builder)

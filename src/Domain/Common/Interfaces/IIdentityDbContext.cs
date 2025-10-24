@@ -8,5 +8,5 @@ public interface IIdentityDbContext
     DbSet<User>  Users { get; }
     DbSet<EmailVerificationToken>  EmailVerificationTokens { get; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

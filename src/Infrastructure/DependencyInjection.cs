@@ -1,6 +1,4 @@
 ﻿using Domain.Common.Interfaces;
-using Games.CQRS.Commands.CreateGame;
-using Identity.CQRS.Commands.CreateUser;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,21 +8,32 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Text;
+using Application;
 
 namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void AddGameInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureGamesDatabaseContext(configuration);
-        services.ConfigureGamesMediatR();
+        services.ConfigureIdentityDatabaseContext(configuration);
+        services.ConfigureScriptoriumMediatR();
+        services.AddEmailServices(configuration);
     }
 
-    public static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    private static void AddGameInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.ConfigureGamesDatabaseContext(configuration);
         services.ConfigureIdentityDatabaseContext(configuration);
-        services.ConfigureIdentityMediatR();
+        services.ConfigureScriptoriumMediatR();
+    }
+
+    private static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.ConfigureGamesDatabaseContext(configuration);
+        services.ConfigureIdentityDatabaseContext(configuration);
+        services.ConfigureScriptoriumMediatR();
 
         services.AddEmailServices(configuration);
     }
@@ -105,19 +114,11 @@ public static class DependencyInjection
         services.AddScoped<IdentityDbContextInitialiser>();
     }
 
-    private static void ConfigureGamesMediatR(this IServiceCollection services)
+    private static void ConfigureScriptoriumMediatR(this IServiceCollection services)
     {
         services.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssembly(typeof(CreateGameCommand).Assembly);
-        });
-    }
-
-    private static void ConfigureIdentityMediatR(this IServiceCollection services)
-    {
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly);
         });
     }
 }
