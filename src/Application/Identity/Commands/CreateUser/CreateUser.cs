@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using FluentEmail.Core;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Identity.Commands.CreateUser;
 
@@ -19,7 +20,7 @@ public record CreateUserCommand : IRequest<UserVm>
 
 public class CreateUserCommandHandler(
     IIdentityDbContext context,
-    PasswordHasher passwordHasher,
+    IPasswordHasher<User> passwordHasher,
     IFluentEmail fluentEmail,
     IEmailVerificationLinkFactory emailVerificationLinkFactory,
     IMapper mapper) : IRequestHandler<CreateUserCommand, UserVm>
@@ -38,11 +39,12 @@ public class CreateUserCommandHandler(
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            PasswordHash = passwordHasher.HashPassword(request.Password),
             CreatedOn = utcNow,
             UpdatedOn = utcNow,
             EmailVerified = false // will be set after verification
         };
+        
+        user.PasswordHash = passwordHasher.HashPassword(user, request.Password);
 
         context.Users.Add(user);
         await context.SaveChangesAsync(cancellationToken: cancellationToken);

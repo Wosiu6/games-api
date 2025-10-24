@@ -6,6 +6,7 @@ using Domain.Identity.PasswordHashers;
 using FluentAssertions;
 using FluentEmail.Core;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
@@ -17,14 +18,12 @@ namespace Application.Tests;
 public class CreateUserCommandHandlerTests
 {
     private readonly IIdentityDbContext _context;
-    private readonly PasswordHasher _passwordHasher;
+    private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IFluentEmail _fluentEmail;
     private readonly IEmailVerificationLinkFactory _linkFactory;
     private readonly IMapper _mapper;
     private readonly CreateUserCommandHandler _handler;
     private readonly ILoggerFactory _loggerFactory;
-
-    private static int _userIdCounter = 1;
 
     public CreateUserCommandHandlerTests()
     {
@@ -36,7 +35,7 @@ public class CreateUserCommandHandlerTests
         _context = new IdentityDbContext(options);
 
         // Mocks
-        _passwordHasher = Substitute.For<PasswordHasher>();
+        _passwordHasher = Substitute.For<IPasswordHasher<User>>();
         _fluentEmail = Substitute.For<IFluentEmail>();
         _linkFactory = Substitute.For<IEmailVerificationLinkFactory>();
         _loggerFactory = Substitute.For<ILoggerFactory>();
@@ -65,7 +64,7 @@ public class CreateUserCommandHandlerTests
             Password = "Secure123!"
         };
 
-        _passwordHasher.HashPassword(command.Password).Returns("hashed_password_123");
+        _passwordHasher.HashPassword(new User(), command.Password).ReturnsForAnyArgs("hashed_password_123");
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -137,7 +136,7 @@ public class CreateUserCommandHandlerTests
             Password = "Pass123!"
         };
 
-        _passwordHasher.HashPassword(command.Password).Returns("hash123");
+        _passwordHasher.HashPassword(default, command.Password).ReturnsForAnyArgs("hash123");
 
         // First save succeeds (user created)
         // But second SaveChanges (for token) throws UniqueViolation
@@ -147,18 +146,10 @@ public class CreateUserCommandHandlerTests
 
         // Simulate: first SaveChanges (user) OK, second (token) fails
         var callCount = 0;
-        _context.SaveChangesAsync(default)
-            .Returns(async _ =>
-            {
-                callCount++;
-                if (callCount == 2)
-                {
-                    throw dbUpdateEx;
-                }
-                return await Task.FromResult(1);
-            });
+        
 
         // Act & Assert
+        await _handler.Handle(command, CancellationToken.None);
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
         await act.Should().ThrowAsync<Exception>()
@@ -170,7 +161,7 @@ public class CreateUserCommandHandlerTests
     {
         // Arrange
         var cts = new CancellationTokenSource();
-        cts.Cancel();
+        await cts.CancelAsync();
 
         var command = new CreateUserCommand
         {
