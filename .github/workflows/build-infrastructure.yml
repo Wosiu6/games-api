@@ -30,4 +30,4 @@ jobs:
       run: dotnet build src/Infrastructure/Infrastructure.csproj --no-restore --configuration Release
     
     - name: Run Infrastructure Tests
-      run: dotnet test tests/ --filter "Category=Infrastructure" --configuration Release --verbosity normal
+      run: dotnet test tests/Infrastructure.Tests --filter "Category=Infrastructure" --configuration Release --verbosity normal
