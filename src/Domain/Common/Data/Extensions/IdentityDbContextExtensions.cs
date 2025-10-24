@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Data.Extensions
+namespace Domain.Common.Data.Extensions
 {
     public static class IdentityDbContextExtensions
     {

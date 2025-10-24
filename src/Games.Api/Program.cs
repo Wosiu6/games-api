@@ -1,7 +1,7 @@
 using Application;
+using Domain.Common.Data.Extensions;
 using Infrastructure;
 using Infrastructure.Data;
-using Infrastructure.Data.Extensions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +13,8 @@ builder.Services.AddOpenApiDocument(configuration, "Games");
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(configuration);
 
-builder.Services.AddGamesApplicationServices();
-builder.Services.AddGameInfrastructure(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseDatabaseAsync<GamesDbContextInitialiser>();
 }
 
-app.MapGamesEndpoints();
+app.MapApplicationEndpoints();
 
 app.UseHttpsRedirection();
 

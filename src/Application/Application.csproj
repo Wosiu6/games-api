@@ -34,8 +34,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
-      <ProjectReference Include="..\Games.CQRS\Games.CQRS.csproj" />
-      <ProjectReference Include="..\Identity.CQRS\Identity.CQRS.csproj" />
     </ItemGroup>
 
 </Project>
