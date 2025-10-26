@@ -1,4 +1,7 @@
-# Games API
+Games API
+==========
+
+[![License][license-shield]][license-url] [![GitHub][github-shield]][github-url]
 
 A .NET 9 Web API for managing games using Clean Architecture, CQRS, and PostgreSQL. It utilises JWT-based authentication with endpoint authorisation.
 
@@ -54,3 +57,16 @@ Alternatively, you can add a bearer to authentication in your header request in 
 - Balance Loader
 - Host on Azure
 - Azure Flexible Database + PostgreSQL
+
+[paypal-shield]: https://img.shields.io/static/v1?label=PayPal&message=Donate&style=flat-square&logo=paypal&color=blue
+[paypal-url]: https://www.paypal.com/donate/?hosted_button_id=MTY5DP7G8G6T4
+
+[coffee-shield]: https://img.shields.io/static/v1?label=BuyMeCoffee&message=Donate&style=flat-square&logo=buy-me-a-coffee&color=orange
+[coffee-url]: https://www.buymeacoffee.com/wosiu6
+
+[license-shield]: https://img.shields.io/badge/license-Apache%20License%202.0-purple
+[license-url]: https://opensource.org/license/apache-2-0
+
+[github-shield]: https://img.shields.io/static/v1?label=&message=GitHub&style=flat-square&logo=github&color=grey
+[github-url]: https://github.com/Wosiu6/cyberpunk2077-discord-theme
+
