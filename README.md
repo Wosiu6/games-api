@@ -68,5 +68,5 @@ Alternatively, you can add a bearer to authentication in your header request in 
 [license-url]: https://opensource.org/license/apache-2-0
 
 [github-shield]: https://img.shields.io/static/v1?label=&message=GitHub&style=flat-square&logo=github&color=grey
-[github-url]: https://github.com/Wosiu6/cyberpunk2077-discord-theme
+[github-url]: https://github.com/Wosiu6/games-api
 
