@@ -17,6 +17,9 @@ using Application.Identity.Commands.LoginUser;
 using Application.Users.Commands.AddUserGame;
 using Application.Users.Queries.GetUserLibrary;
 using Application.Games.Commands.DeleteGame;
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities;
+using Domain.Common.Interfaces;
 
 namespace Application.Extensions
 {
@@ -35,8 +38,8 @@ namespace Application.Extensions
             services.AddAutoMapper(cfg => { }, typeof(UserDto.Mapping));
             services.AddAutoMapper(cfg => { }, typeof(UserVm.Mapping));
 
-            services.AddSingleton<PasswordHasher>();
             services.AddSingleton<TokenProvider>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<Domain.Common.Interfaces.IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
             services.AddScoped<Mapper>();
             services.AddHttpContextAccessor();

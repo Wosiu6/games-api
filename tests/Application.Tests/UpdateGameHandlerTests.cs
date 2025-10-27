@@ -37,7 +37,7 @@ public class UpdateGameHandlerTests
 
         await handler.Handle(cmd, CancellationToken.None);
 
-        var updated = await context.Games.FindAsync(new object[] { game.Id }, CancellationToken.None);
+        var updated = await context.Games.FindAsync([game.Id], CancellationToken.None);
 
         Assert.Equal("New Title", updated.Title);
     }
