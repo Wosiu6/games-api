@@ -30,7 +30,8 @@ public class LoginUserHandlerTests
             LastName = "User",
             CreatedOn = DateTime.UtcNow,
             UpdatedOn = DateTime.UtcNow,
-            EmailVerified = true
+            EmailVerified = true,
+            PasswordHash = "dummyhash"
         };
 
 

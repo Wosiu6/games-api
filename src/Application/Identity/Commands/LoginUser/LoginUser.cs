@@ -31,7 +31,7 @@ public class LoginUserCommandHandler(IIdentityDbContext context, IPasswordHasher
 
         Guard.Against.NotFound(request.Email, user);
 
-        var verificationResult = passwordHasher.VerifyHashedPassword(user, request.Password, user.PasswordHash);
+        var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         var isVerified = verificationResult == PasswordVerificationResult.Success
             || verificationResult == PasswordVerificationResult.SuccessRehashNeeded;
