@@ -1,6 +1,10 @@
-﻿using Domain.Common.Interfaces;
+﻿using Application;
+using Application.Identity.Commands.CreateUser;
+using Application.Users.Commands.AddUserGame;
+using Domain.Common.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Text;
-using Application;
 
 namespace Infrastructure;
 
@@ -18,7 +21,7 @@ public static class DependencyInjection
     {
         services.ConfigureGamesDatabaseContext(configuration);
         services.ConfigureIdentityDatabaseContext(configuration);
-        services.ConfigureScriptoriumMediatR();
+        services.ConfigureMediatR();
         services.AddEmailServices(configuration);
     }
 
@@ -26,14 +29,14 @@ public static class DependencyInjection
     {
         services.ConfigureGamesDatabaseContext(configuration);
         services.ConfigureIdentityDatabaseContext(configuration);
-        services.ConfigureScriptoriumMediatR();
+        services.ConfigureMediatR();
     }
 
     private static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureGamesDatabaseContext(configuration);
         services.ConfigureIdentityDatabaseContext(configuration);
-        services.ConfigureScriptoriumMediatR();
+        services.ConfigureMediatR();
 
         services.AddEmailServices(configuration);
     }
@@ -114,11 +117,12 @@ public static class DependencyInjection
         services.AddScoped<IdentityDbContextInitialiser>();
     }
 
-    private static void ConfigureScriptoriumMediatR(this IServiceCollection services)
+    private static void ConfigureMediatR(this IServiceCollection services)
     {
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(UserVm).Assembly);
         });
     }
 }

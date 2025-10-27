@@ -26,7 +26,7 @@ public class CreateGameHandlerTests
 
         int id = await handler.Handle(cmd, CancellationToken.None);
 
-        var saved = await context.Games.FindAsync(new object[] { id }, CancellationToken.None);
+        var saved = await context.Games.FindAsync([id], CancellationToken.None);
 
         Assert.NotNull(saved);
         Assert.Equal("Unit Test Game", saved.Title);

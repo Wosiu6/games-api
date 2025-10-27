@@ -1,7 +1,9 @@
 using Application.Identity.Commands.LoginUser;
+using Domain.Entities;
 using Domain.Identity.IdentityProviders;
 using Domain.Identity.PasswordHashers;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
@@ -19,20 +21,24 @@ public class LoginUserHandlerTests
 
         await using var context = new IdentityDbContext(options);
 
-        var passwordHasher = new PasswordHasher();
+        var passwordHasher = new PasswordHasher<User>();
         var pwd = "MySecret123!";
         var user = new Domain.Entities.User
         {
             Email = "login@test.local",
             FirstName = "Login",
             LastName = "User",
-            PasswordHash = passwordHasher.HashPassword(pwd),
             CreatedOn = DateTime.UtcNow,
             UpdatedOn = DateTime.UtcNow,
-            EmailVerified = true
+            EmailVerified = true,
+            PasswordHash = "dummyhash"
         };
 
+
         context.Users.Add(user);
+        await context.SaveChangesAsync(CancellationToken.None);
+
+        user.PasswordHash = passwordHasher.HashPassword(user, pwd);
         await context.SaveChangesAsync(CancellationToken.None);
 
         var inMemorySettings = new Dictionary<string, string?> {

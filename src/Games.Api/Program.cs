@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseDatabaseAsync<GamesDbContextInitialiser>();
 }
 
-app.MapApplicationEndpoints();
+app.MapGamesEndpoints();
 
 app.UseHttpsRedirection();
 

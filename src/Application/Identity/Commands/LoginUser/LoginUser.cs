@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Identity.IdentityProviders;
 using Domain.Identity.PasswordHashers;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,7 +23,7 @@ public record LoginUserCommand : IRequest<string>
     public string Password { get; set; } = null!;
 }
 
-public class LoginUserCommandHandler(IIdentityDbContext context, PasswordHasher passwordHasher, TokenProvider tokenProvider) : IRequestHandler<LoginUserCommand, string>
+public class LoginUserCommandHandler(IIdentityDbContext context, IPasswordHasher<User> passwordHasher, TokenProvider tokenProvider) : IRequestHandler<LoginUserCommand, string>
 {
     public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
@@ -30,9 +31,12 @@ public class LoginUserCommandHandler(IIdentityDbContext context, PasswordHasher 
 
         Guard.Against.NotFound(request.Email, user);
 
-        bool verified = passwordHasher.Verify(request.Password, user.PasswordHash);
+        var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
-        Guard.Against.NotFound(false, verified);
+        var isVerified = verificationResult == PasswordVerificationResult.Success
+            || verificationResult == PasswordVerificationResult.SuccessRehashNeeded;
+
+        Guard.Against.NotFound(false, isVerified);
 
         string token = tokenProvider.Create(user);
 
