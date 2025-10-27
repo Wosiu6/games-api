@@ -10,6 +10,8 @@ public record CreateAchievementCommand : IRequest<int>
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
     public int Points { get; set; }
+    public int ProgressTotal { get; set; }
+    public int ProgressCurrent { get; set; }
 }
 
 public class CreateAchievementCommandHandler(IGamesDbContext context) : IRequestHandler<CreateAchievementCommand, int>

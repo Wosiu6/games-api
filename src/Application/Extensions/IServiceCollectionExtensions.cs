@@ -72,6 +72,20 @@ namespace Application.Extensions
                 return TypedResults.Ok(vm);
             });
 
+            app.MapPut("/games/{gameId:int}/achievements/{achievementId:int}", async Task<IResult> (IMediator mediator, int gameId, int achievementId, UpdateAchievementCommand request) =>
+            {
+                if (achievementId != request.Id) return TypedResults.BadRequest();
+                await mediator.Send(request);
+                return TypedResults.NoContent();
+            });
+
+            app.MapPut("/games/{gameId:int}/achievements/{achievementId:int}/progress", async Task<IResult> (IMediator mediator, int gameId, int achievementId, ProgressAchievementCommand request) =>
+            {
+                if (achievementId != request.Id) return TypedResults.BadRequest();
+                await mediator.Send(request);
+                return TypedResults.NoContent();
+            });
+
             app.MapPut("/games/{id:int}", async Task<IResult> (IMediator mediator, int id, UpdateGameCommand request) =>
             {
                 if (id != request.Id) return TypedResults.BadRequest();

@@ -10,6 +10,8 @@ public class Achievement : BaseAuditableEntity
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
     public int Points { get; set; }
+    public int ProgressTotal { get; set; }
+    public int ProgressCurrent { get; set; }
 
     // navigation
     public Game? Game { get; set; }
