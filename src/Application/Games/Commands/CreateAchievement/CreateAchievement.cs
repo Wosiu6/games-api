@@ -11,7 +11,6 @@ public record CreateAchievementCommand : IRequest<int>
     public string? Description { get; set; }
     public int Points { get; set; }
     public int ProgressTotal { get; set; }
-    public int ProgressCurrent { get; set; }
 }
 
 public class CreateAchievementCommandHandler(IGamesDbContext context) : IRequestHandler<CreateAchievementCommand, int>
@@ -24,6 +23,7 @@ public class CreateAchievementCommandHandler(IGamesDbContext context) : IRequest
             Name = request.Name,
             Description = request.Description,
             Points = request.Points,
+            ProgressTotal = request.ProgressTotal,
             CreatedOn = DateTime.UtcNow,
             UpdatedOn = DateTime.UtcNow
         };

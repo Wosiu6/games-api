@@ -42,6 +42,8 @@ public class IdentityDbContextInitialiser(
 
     public async Task TrySeedAsync()
     {
+        string placeholderHash = new Guid().ToString();
+
         if (!context.Users.Any())
         {
             var users = new List<User>
@@ -51,28 +53,32 @@ public class IdentityDbContextInitialiser(
                     Email = "admin@example.com",
                     FirstName = "Admin",
                     LastName = "User",
-                    EmailVerified = true
+                    EmailVerified = true,
+                    PasswordHash = placeholderHash
                 },
                 new()
                 {
                     Email = "john.doe@example.com",
                     FirstName = "John",
                     LastName = "Doe",
-                    EmailVerified = true
+                    EmailVerified = true,
+                    PasswordHash = placeholderHash
                 },
                 new()
                 {
                     Email = "jane.smith@example.com",
                     FirstName = "Jane",
                     LastName = "Smith",
-                    EmailVerified = false
+                    EmailVerified = false,
+                    PasswordHash = placeholderHash
                 },
                 new()
                 {
                     Email = "test@example.com",
                     FirstName = "Test",
                     LastName = "User",
-                    EmailVerified = true
+                    EmailVerified = true,
+                    PasswordHash = placeholderHash
                 }
             };
 

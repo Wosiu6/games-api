@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using FluentEmail.Core;
 using Microsoft.AspNetCore.Identity;
+using Application.Identity.Queries.GetUsers;
 
 namespace Application.Identity.Commands.CreateUser;
 
-public record CreateUserCommand : IRequest<UserVm>
+public record CreateUserCommand : IRequest<int>
 {
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
@@ -22,10 +23,9 @@ public class CreateUserCommandHandler(
     IIdentityDbContext context,
     IPasswordHasher<User> passwordHasher,
     IFluentEmail fluentEmail,
-    IEmailVerificationLinkFactory emailVerificationLinkFactory,
-    IMapper mapper) : IRequestHandler<CreateUserCommand, UserVm>
+    IEmailVerificationLinkFactory emailVerificationLinkFactory) : IRequestHandler<CreateUserCommand, int>
 {
-    public async Task<UserVm> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         if (await context.Users.AnyAsync(u => u.Email == request.Email, cancellationToken: cancellationToken))
         {
@@ -52,9 +52,7 @@ public class CreateUserCommandHandler(
         // create verification token and send email
         await VerifyEmailAsync(user, cancellationToken);
 
-        var userDto = mapper.Map<UserDto>(user);
-
-        return mapper.Map<UserVm>(userDto);
+        return user.Id;
     }
 
     private async Task VerifyEmailAsync(User user, CancellationToken cancellationToken)
@@ -66,6 +64,7 @@ public class CreateUserCommandHandler(
             CreatedOn = utcNow,
             UpdatedOn = utcNow,
             ExpiresOn = utcNow.AddHours(1),
+            User = user
         };
 
         context.EmailVerificationTokens.Add(verificationToken);

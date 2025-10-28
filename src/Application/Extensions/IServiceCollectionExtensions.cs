@@ -20,6 +20,9 @@ using Application.Games.Commands.DeleteGame;
 using Microsoft.AspNetCore.Identity;
 using Domain.Entities;
 using Domain.Common.Interfaces;
+using Application.Games.Commands.UpdateAchievement;
+using Application.Games.Commands.ProgressAchievement;
+using Application.Identity.Queries.GetUsers;
 
 namespace Application.Extensions
 {
@@ -53,18 +56,13 @@ namespace Application.Extensions
                 return TypedResults.Created($"games/{newGameId}", newGameId);
             });
 
-            app.MapPost("/games/{gameId:int}/achievements", (Func<HttpContext, Task<IResult>>)(async (HttpContext ctx) =>
+            app.MapPost("/games/{gameId:int}/achievements", async Task<IResult> (IMediator mediator, CreateAchievementCommand request, int gameId) =>
             {
-                var mediator = ctx.RequestServices.GetRequiredService<IMediator>();
-                if (!ctx.Request.RouteValues.TryGetValue("gameId", out var gv) || gv == null || !int.TryParse(gv.ToString(), out var gameId))
-                    return TypedResults.BadRequest();
-
-                var request = await ctx.Request.ReadFromJsonAsync<CreateAchievementCommand>();
                 if (request == null) return TypedResults.BadRequest();
                 if (gameId != request.GameId) return TypedResults.BadRequest();
                 var achievementId = await mediator.Send(request);
                 return TypedResults.Created($"games/{gameId}/achievements/{achievementId}", achievementId);
-            }));
+            });
 
             app.MapGet("/games/{gameId:int}/achievements", async (IMediator mediator, int gameId) =>
             {
@@ -74,15 +72,15 @@ namespace Application.Extensions
 
             app.MapPut("/games/{gameId:int}/achievements/{achievementId:int}", async Task<IResult> (IMediator mediator, int gameId, int achievementId, UpdateAchievementCommand request) =>
             {
-                if (achievementId != request.Id) return TypedResults.BadRequest();
+                if (achievementId != request.AchievementId) return TypedResults.BadRequest();
+                if (gameId != request.GameId) return TypedResults.BadRequest();
                 await mediator.Send(request);
                 return TypedResults.NoContent();
             });
 
-            app.MapPut("/games/{gameId:int}/achievements/{achievementId:int}/progress", async Task<IResult> (IMediator mediator, int gameId, int achievementId, ProgressAchievementCommand request) =>
+            app.MapPut("/games/{gameId:int}/achievements/{achievementId:int}/progress", async Task<IResult> (IMediator mediator, int gameId, int achievementId) =>
             {
-                if (achievementId != request.Id) return TypedResults.BadRequest();
-                await mediator.Send(request);
+                await mediator.Send(new ProgressAchievementCommand(achievementId, gameId));
                 return TypedResults.NoContent();
             });
 
@@ -107,18 +105,13 @@ namespace Application.Extensions
 
         internal static void ConfigureUserLibraryEndpoints(this WebApplication app)
         {
-            app.MapPost("/users/{userId:int}/library", (Func<HttpContext, Task<IResult>>)(async (HttpContext ctx) =>
+            app.MapPost("/users/{userId:int}/library", async Task<IResult> (IMediator mediator, AddUserGameCommand request, int userId) =>
             {
-                var mediator = ctx.RequestServices.GetRequiredService<IMediator>();
-                if (!ctx.Request.RouteValues.TryGetValue("userId", out var uv) || uv == null || !int.TryParse(uv.ToString(), out var userId))
-                    return TypedResults.BadRequest();
-
-                var request = await ctx.Request.ReadFromJsonAsync<AddUserGameCommand>();
                 if (request == null) return TypedResults.BadRequest();
                 if (userId != request.UserId) return TypedResults.BadRequest();
                 var id = await mediator.Send(request);
                 return TypedResults.Created($"users/{userId}/library/{id}", id);
-            })).RequireAuthorization();
+            }).RequireAuthorization();
 
             app.MapGet("/users/{userId:int}/library", async (IMediator mediator, int userId) =>
             {
@@ -131,8 +124,8 @@ namespace Application.Extensions
         {
             app.MapPost("/users", async (IMediator mediator, CreateUserCommand request) =>
             {
-                var newUser = await mediator.Send(request);
-                return TypedResults.Created($"users/{newUser.Id}", newUser);
+                var newUserId = await mediator.Send(request);
+                return TypedResults.Created($"users/{newUserId}");
             });
 
             app.MapPost("/users/login", async (IMediator mediator, LoginUserCommand request) =>
@@ -140,6 +133,12 @@ namespace Application.Extensions
                 var token = await mediator.Send(request);
                 return TypedResults.Created($"users/login/", new { jwt_token = token });
             });
+
+            app.MapGet("/users", async (IMediator mediator) =>
+            {
+                var vm = await mediator.Send(new GetUsersQuery());
+                return TypedResults.Ok(vm);
+            }).RequireAuthorization();
         }
     }
 }

@@ -1,4 +1,5 @@
 using Application.Identity.Commands.CreateUser;
+using Application.Identity.Queries.GetUsers;
 using AutoMapper;
 using Domain.Common.Interfaces;
 using Domain.Entities;

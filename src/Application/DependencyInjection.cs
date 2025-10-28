@@ -31,6 +31,7 @@ public static class DependencyInjection
     public static void MapGamesEndpoints(this WebApplication builder)
     {
         builder.ConfigureGamesEndpoints();
+        builder.ConfigureUserLibraryEndpoints();
     }
 
     public static void MapIdentityEndpoints(this WebApplication builder)
