@@ -9,5 +9,5 @@ public class EmailVerificationToken : BaseAuditableEntity
     public int UserId { get; set; }
     public DateTime ExpiresOn { get; set; }
 
-    public User User { get; set; }
+    public required User User { get; set; }
 }

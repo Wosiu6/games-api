@@ -2,11 +2,10 @@ using Ardalis.GuardClauses;
 using Domain.Common.Interfaces;
 using MediatR;
 
-namespace Application.Games.Commands.UpdateGame;
+namespace Application.Games.Commands.UpdateAchievement;
 
-public record UpdateAchievementCommand(int Id) : IRequest
+public record UpdateAchievementCommand(int AchievementId, int GameId) : IRequest
 {
-    public string AchievementId { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
     public int Points { get; set; }
@@ -19,9 +18,10 @@ public class UpdateAchievementCommandHandler(IGamesDbContext context) : IRequest
     public async Task Handle(UpdateAchievementCommand request, CancellationToken cancellationToken)
     {
         var entity = await context.Achievements
-            .FindAsync([request.Id], cancellationToken);
+            .FindAsync([request.AchievementId], cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.AchievementId, entity);
+        Guard.Against.NotFound(request.GameId, entity.GameId);
 
         entity.Name = request.Name;
         entity.Description = request.Description;

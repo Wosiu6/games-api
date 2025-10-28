@@ -1,5 +1,5 @@
 ﻿using Application;
-using Application.Identity.Commands.CreateUser;
+using Application.Identity.Queries.GetUsers;
 using Application.Users.Commands.AddUserGame;
 using Domain.Common.Interfaces;
 using Infrastructure.Data;

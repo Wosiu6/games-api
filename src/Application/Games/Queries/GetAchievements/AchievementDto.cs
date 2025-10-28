@@ -10,6 +10,8 @@ public class AchievementDto
     public string Name { get; init; } = null!;
     public string? Description { get; init; }
     public int Points { get; init; }
+    public int ProgressTotal { get; init; }
+    public int ProgressCurrent { get; init; }
 
     public class Mapping : Profile
     {

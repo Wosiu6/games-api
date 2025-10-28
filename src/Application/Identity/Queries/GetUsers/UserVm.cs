@@ -1,9 +1,8 @@
 using AutoMapper;
-using Domain.Entities;
 
-namespace Application.Identity.Commands.CreateUser;
+namespace Application.Identity.Queries.GetUsers;
 
-public class UserDto
+public class UserVm
 {
     public int Id { get; init; }
     public string Email { get; init; } = null!;
@@ -14,7 +13,7 @@ public class UserDto
     {
         public Mapping()
         {
-            CreateMap<User, UserDto>();
+            CreateMap<UserDto, UserVm>();
         }
     }
 }

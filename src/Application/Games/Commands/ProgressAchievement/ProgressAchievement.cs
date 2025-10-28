@@ -2,16 +2,10 @@ using Ardalis.GuardClauses;
 using Domain.Common.Interfaces;
 using MediatR;
 
-namespace Application.Games.Commands.UpdateGame;
+namespace Application.Games.Commands.ProgressAchievement;
 
-public record ProgressAchievementCommand(int Id) : IRequest
+public record ProgressAchievementCommand(int AchievementId, int GameId) : IRequest
 {
-    public string AchievementId { get; set; } = null!;
-    public string Name { get; set; } = null!;
-    public string? Description { get; set; }
-    public int Points { get; set; }
-    public int ProgressTotal { get; set; }
-    public int ProgressCurrent { get; set; }
 }
 
 public class ProgressAchievementCommandHandler(IGamesDbContext context) : IRequestHandler<ProgressAchievementCommand>
@@ -19,13 +13,15 @@ public class ProgressAchievementCommandHandler(IGamesDbContext context) : IReque
     public async Task Handle(ProgressAchievementCommand request, CancellationToken cancellationToken)
     {
         var entity = await context.Achievements
-            .FindAsync([request.Id], cancellationToken);
+            .FindAsync([request.AchievementId], cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.AchievementId, entity);
+
+        Guard.Against.NotFound(request.GameId, entity.GameId);
 
         if (entity.ProgressCurrent < entity.ProgressTotal)
         {
-            entity.ProgressCurrent = request.ProgressCurrent + 1;
+            entity.ProgressCurrent = entity.ProgressCurrent + 1;
         }
 
         entity.UpdatedOn = DateTime.UtcNow;
