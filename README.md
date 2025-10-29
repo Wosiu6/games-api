@@ -158,8 +158,8 @@ MIT
 [coffee-shield]: https://img.shields.io/static/v1?label=BuyMeCoffee&message=Donate&style=flat-square&logo=buy-me-a-coffee&color=orange
 [coffee-url]: https://www.buymeacoffee.com/wosiu6
 
-[license-shield]: https://img.shields.io/badge/license-Apache%20License%202.0-purple
-[license-url]: https://opensource.org/license/apache-2-0
+[license-shield]: https://img.shields.io/badge/license-MITLicense%202.0-purple
+[license-url]: https://opensource.org/license/mit
 
 [github-shield]: https://img.shields.io/static/v1?label=&message=GitHub&style=flat-square&logo=github&color=grey
 [github-url]: https://github.com/Wosiu6/games-api
