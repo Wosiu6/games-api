@@ -28,20 +28,17 @@ public class CreateUserCommandHandlerTests
 
     public CreateUserCommandHandlerTests()
     {
-        // Setup In-Memory DbContext
         var options = new DbContextOptionsBuilder<IdentityDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _context = new IdentityDbContext(options);
 
-        // Mocks
         _passwordHasher = Substitute.For<IPasswordHasher<User>>();
         _fluentEmail = Substitute.For<IFluentEmail>();
         _linkFactory = Substitute.For<IEmailVerificationLinkFactory>();
         _loggerFactory = Substitute.For<ILoggerFactory>();
 
-        // AutoMapper Configuration
         var config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<User, UserDto>();
@@ -139,13 +136,10 @@ public class CreateUserCommandHandlerTests
 
         _passwordHasher.HashPassword(default, command.Password).ReturnsForAnyArgs("hash123");
 
-        // First save succeeds (user created)
-        // But second SaveChanges (for token) throws UniqueViolation
         var dbUpdateEx = new DbUpdateException(
             "Unique violation",
             new PostgresException("duplicate key value", "23505", "XX000", "duplicate key value violates unique constraint"));
 
-        // Simulate: first SaveChanges (user) OK, second (token) fails
         var callCount = 0;
         
 
@@ -179,7 +173,6 @@ public class CreateUserCommandHandlerTests
         await act.Should().ThrowAsync<OperationCanceledException>();
     }
 
-    // Optional: Test mapping chain
     [Fact]
     public void Mapper_UserToUserVm_MapsCorrectly()
     {

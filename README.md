@@ -138,9 +138,9 @@ dotnet ef database update \
 
 ## TODO
 
-- [ ] Implement **API Gateway** (e.g., Ocelot or YARP)
+- [x] Implement **API Gateway**
+- [x] Docker compose and Dockermake files
 - [ ] Add **Load Balancer** for scalability
-- [ ] Deploy to **Azure App Services**
 - [ ] Use **Azure Flexible Database for PostgreSQL**
 - [ ] Add **Rate Limiting** and **Caching**, possibly Redis
 

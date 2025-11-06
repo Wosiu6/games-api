@@ -1,0 +1,99 @@
+# Production docker-compose.yml
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - games-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: ./src/Gateway.Api/Dockerfile
+    container_name: gateway-api
+    restart: unless-stopped
+    ports:
+      - "80:7000"
+      - "443:7000"  # If you add HTTPS
+    depends_on:
+      postgres:
+        condition: service_healthy
+      games-api:
+        condition: service_started
+      identity-api:
+        condition: service_started
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:7000
+      - ReverseProxy__Clusters__games-cluster__Destinations__games-api__Address=http://games-api:7001
+      - ReverseProxy__Clusters__identity-cluster__Destinations__identity-api__Address=http://identity-api:7002
+    networks:
+      - games-network
+
+  games-api:
+    build:
+      context: ..
+      dockerfile: ./src/Games.Api/Dockerfile
+    container_name: games-api
+    restart: unless-stopped
+    expose:
+      - "7001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:7001
+      - ConnectionStrings__GamesDb=Host=postgres;Database=GamesDb;Username=postgres;Password_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    networks:
+      - games-network
+    
+  identity-api:
+    build:
+      context: ..
+      dockerfile: ./src/Identity.Api/Dockerfile
+    container_name: identity-api
+    restart: unless-stopped
+    expose:
+      - "7002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:7002
+      - ConnectionStrings__Identity=Host=postgres;Database=Identity;Username=postgres;Password_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    networks:
+      - games-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  games-network:
+    driver: bridge
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt

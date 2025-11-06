@@ -1,7 +1,9 @@
 using Application;
 using Domain.Common.Data.Extensions;
+using HealthChecks.UI.Client;
 using Infrastructure;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
