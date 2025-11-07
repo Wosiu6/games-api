@@ -148,6 +148,8 @@ dotnet ef database update \
 
 - [x] Implement **API Gateway**
 - [x] Docker compose and Dockermake files
+- [x] Global exception handler
+- [x] Fluent Validation 
 - [ ] Add **Load Balancer** for scalability
 - [ ] Use **Azure Flexible Database for PostgreSQL**
 - [ ] Add **Rate Limiting** and **Caching**, possibly Redis
