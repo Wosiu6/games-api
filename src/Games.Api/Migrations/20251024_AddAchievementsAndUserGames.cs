@@ -13,7 +13,6 @@ namespace Games.Api.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // add new columns to Games table
             migrationBuilder.AddColumn<string>(
                 name: "Description",
                 table: "Games",
@@ -45,7 +44,6 @@ namespace Games.Api.Migrations
                 nullable: false,
                 defaultValue: 0m);
 
-            // create Achievements table
             migrationBuilder.CreateTable(
                 name: "Achievements",
                 columns: table => new
@@ -70,7 +68,6 @@ namespace Games.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            // create UserGames table
             migrationBuilder.CreateTable(
                 name: "UserGames",
                 columns: table => new
@@ -94,7 +91,6 @@ namespace Games.Api.Migrations
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    // Note: User FK refers to identity schema in a different DbContext; keep as int for now
                 });
 
             migrationBuilder.CreateIndex(

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using NSubstitute;
 using Xunit;
+using Application.Common.Exceptions;
 
 namespace Application.Tests;
 
@@ -28,20 +29,17 @@ public class CreateUserCommandHandlerTests
 
     public CreateUserCommandHandlerTests()
     {
-        // Setup In-Memory DbContext
         var options = new DbContextOptionsBuilder<IdentityDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _context = new IdentityDbContext(options);
 
-        // Mocks
         _passwordHasher = Substitute.For<IPasswordHasher<User>>();
         _fluentEmail = Substitute.For<IFluentEmail>();
         _linkFactory = Substitute.For<IEmailVerificationLinkFactory>();
         _loggerFactory = Substitute.For<ILoggerFactory>();
 
-        // AutoMapper Configuration
         var config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<User, UserDto>();
@@ -50,7 +48,7 @@ public class CreateUserCommandHandlerTests
         _mapper = config.CreateMapper();
 
         _handler = new CreateUserCommandHandler(
-            _context, _passwordHasher, _fluentEmail, _linkFactory, _mapper);
+            _context, _passwordHasher, _fluentEmail, _linkFactory);
     }
 
     [Fact]
@@ -87,9 +85,7 @@ public class CreateUserCommandHandlerTests
 
         _linkFactory.Received(1).Create(Arg.Any<EmailVerificationToken>());
 
-        result.Should().NotBeNull();
-        result.Email.Should().Be(command.Email);
-        result.FirstName.Should().Be("John");
+        result.Should().BeGreaterThan(0);
     }
 
     [Fact]
@@ -121,8 +117,7 @@ public class CreateUserCommandHandlerTests
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("The email is already in use");
+        await act.Should().ThrowAsync<EmailAlreadyInUseException>();
     }
 
     [Fact]
@@ -137,24 +132,17 @@ public class CreateUserCommandHandlerTests
             Password = "Pass123!"
         };
 
-        _passwordHasher.HashPassword(default, command.Password).ReturnsForAnyArgs("hash123");
+        _passwordHasher.HashPassword(Arg.Any<User>(), command.Password).ReturnsForAnyArgs("hash123");
 
-        // First save succeeds (user created)
-        // But second SaveChanges (for token) throws UniqueViolation
         var dbUpdateEx = new DbUpdateException(
             "Unique violation",
             new PostgresException("duplicate key value", "23505", "XX000", "duplicate key value violates unique constraint"));
-
-        // Simulate: first SaveChanges (user) OK, second (token) fails
-        var callCount = 0;
-        
 
         // Act & Assert
         await _handler.Handle(command, CancellationToken.None);
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("The email is already in use");
+        await act.Should().ThrowAsync<EmailAlreadyInUseException>();
     }
 
     [Fact]
@@ -179,7 +167,6 @@ public class CreateUserCommandHandlerTests
         await act.Should().ThrowAsync<OperationCanceledException>();
     }
 
-    // Optional: Test mapping chain
     [Fact]
     public void Mapper_UserToUserVm_MapsCorrectly()
     {

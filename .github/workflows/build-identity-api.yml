@@ -5,15 +5,15 @@ on:
     branches: [ main, develop ]
     paths:
       - 'src/Identity.Api/**'
-      - 'src/Identity.CQRS/**'
       - 'src/Domain/**'
+      - 'src/Application/**'
       - 'src/Infrastructure/**'
   pull_request:
     branches: [ main, develop ]
     paths:
       - 'src/Identity.Api/**'
-      - 'src/Identity.CQRS/**'
       - 'src/Domain/**'
+      - 'src/Application/**'
       - 'src/Infrastructure/**'
   workflow_dispatch:
 

@@ -23,6 +23,9 @@ using Domain.Common.Interfaces;
 using Application.Games.Commands.UpdateAchievement;
 using Application.Games.Commands.ProgressAchievement;
 using Application.Identity.Queries.GetUsers;
+using FluentValidation;
+using Application.Common.Behaviours;
+using System.Reflection;
 
 namespace Application.Extensions
 {
@@ -34,6 +37,12 @@ namespace Application.Extensions
             services.AddAutoMapper(cfg => { },
                 typeof(GameDto.Mapping),
                 typeof(AchievementDto.Mapping));
+            
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            
+            services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
+            services.AddScoped<IValidator<LoginUserCommand>, LoginUserCommandValidator>();
         }
 
         internal static void AddIdentityServices(this IServiceCollection services)
@@ -43,7 +52,7 @@ namespace Application.Extensions
 
             services.AddSingleton<TokenProvider>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<Domain.Common.Interfaces.IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+            services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
             services.AddScoped<Mapper>();
             services.AddHttpContextAccessor();
         }

@@ -13,6 +13,5 @@ public class Achievement : BaseAuditableEntity
     public int ProgressTotal { get; set; }
     public int ProgressCurrent { get; set; }
 
-    // navigation
     public Game? Game { get; set; }
 }

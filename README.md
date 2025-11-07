@@ -39,9 +39,17 @@ The solution is structured into two APIs:
      - `GamesDb`
      - `IdentityDb`
 
-2. **Run Migrations** (see below)
+2. **JWT Key Configuration**  
+   For production, set the JWT key using environment variables or Azure Key Vault:
+   ```bash
+   # Environment variable
+   export JwtSettings__Key="your-super-secure-jwt-key-at-least-256-bits-long"
+   
+   # Or use appsettings.Production.json
+   ```
+3. **Run Migrations** (see below)
 
-3. **Seed Data & Authentication**  
+4. **Seed Data & Authentication**  
    Run in **Debug mode** to auto-seed initial data.  
    Use the `/users/login` endpoint to get a **JWT token**, then:
    - In **Swagger**: Click **Authorize** → paste `Bearer <token>`
@@ -138,9 +146,9 @@ dotnet ef database update \
 
 ## TODO
 
-- [ ] Implement **API Gateway** (e.g., Ocelot or YARP)
+- [x] Implement **API Gateway**
+- [x] Docker compose and Dockermake files
 - [ ] Add **Load Balancer** for scalability
-- [ ] Deploy to **Azure App Services**
 - [ ] Use **Azure Flexible Database for PostgreSQL**
 - [ ] Add **Rate Limiting** and **Caching**, possibly Redis
 
