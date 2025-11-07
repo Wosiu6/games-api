@@ -42,10 +42,7 @@ The solution is structured into two APIs:
 2. **JWT Key Configuration**  
    For production, set the JWT key using environment variables or Azure Key Vault:
    ```bash
-   # Environment variable
    export JwtSettings__Key="your-super-secure-jwt-key-at-least-256-bits-long"
-   
-   # Or use appsettings.Production.json
    ```
 3. **Run Migrations** (see below)
 
