@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Npgsql;
 using NSubstitute;
 using Xunit;
+using Application.Common.Exceptions;
 
 namespace Application.Tests;
 
@@ -47,7 +48,7 @@ public class CreateUserCommandHandlerTests
         _mapper = config.CreateMapper();
 
         _handler = new CreateUserCommandHandler(
-            _context, _passwordHasher, _fluentEmail, _linkFactory, _mapper);
+            _context, _passwordHasher, _fluentEmail, _linkFactory);
     }
 
     [Fact]
@@ -84,9 +85,7 @@ public class CreateUserCommandHandlerTests
 
         _linkFactory.Received(1).Create(Arg.Any<EmailVerificationToken>());
 
-        result.Should().NotBeNull();
-        result.Email.Should().Be(command.Email);
-        result.FirstName.Should().Be("John");
+        result.Should().BeGreaterThan(0);
     }
 
     [Fact]
@@ -118,8 +117,7 @@ public class CreateUserCommandHandlerTests
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("The email is already in use");
+        await act.Should().ThrowAsync<EmailAlreadyInUseException>();
     }
 
     [Fact]
@@ -134,21 +132,17 @@ public class CreateUserCommandHandlerTests
             Password = "Pass123!"
         };
 
-        _passwordHasher.HashPassword(default, command.Password).ReturnsForAnyArgs("hash123");
+        _passwordHasher.HashPassword(Arg.Any<User>(), command.Password).ReturnsForAnyArgs("hash123");
 
         var dbUpdateEx = new DbUpdateException(
             "Unique violation",
             new PostgresException("duplicate key value", "23505", "XX000", "duplicate key value violates unique constraint"));
 
-        var callCount = 0;
-        
-
         // Act & Assert
         await _handler.Handle(command, CancellationToken.None);
         var act = async () => await _handler.Handle(command, CancellationToken.None);
 
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("The email is already in use");
+        await act.Should().ThrowAsync<EmailAlreadyInUseException>();
     }
 
     [Fact]
