@@ -1,10 +1,8 @@
 ﻿using Application;
 using Application.Identity.Queries.GetUsers;
-using Application.Users.Commands.AddUserGame;
 using Domain.Common.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
