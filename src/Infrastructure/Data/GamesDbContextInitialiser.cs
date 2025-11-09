@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Interfaces;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data;
@@ -12,9 +13,12 @@ public class GamesDbContextInitialiser(
     {
         try
         {
-            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
+
+            await context.Database.MigrateAsync();
+            
             await SeedAsync();
+
         }
         catch (Exception ex)
         {

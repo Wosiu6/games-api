@@ -12,6 +12,11 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
     private readonly RequestDelegate _next = next;
     private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger = logger;
 
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -42,10 +47,7 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
             }
         };
 
-        var jsonResponse = JsonSerializer.Serialize(response, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var jsonResponse = JsonSerializer.Serialize(response, _jsonSerializerOptions);
 
         await context.Response.WriteAsync(jsonResponse);
     }

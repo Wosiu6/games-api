@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Identity.PasswordHashers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data;
@@ -15,8 +16,9 @@ public class IdentityDbContextInitialiser(
     {
         try
         {
-            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
+
+            await context.Database.MigrateAsync();
 
             await SeedAsync();
         }
