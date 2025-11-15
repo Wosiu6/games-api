@@ -12,17 +12,6 @@ The solution is structured into two APIs:
 
 ---
 
-## Tech Stack
-
-- **.NET 9** - Framework
-- **Entity Framework Core** - ORM with PostgreSQL
-- **MediatR** - CQRS pattern implementation
-- **AutoMapper** - Object-to-object mapping
-- **Minimal APIs** - Lightweight endpoint definitions
-- **Azure Identity** - JWT authentication & authorization
-
----
-
 ## Prerequisites
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
